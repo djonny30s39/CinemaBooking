@@ -6,8 +6,8 @@
 <style>
     #general-container
     {
-        height: @(Model.CinemaHallHeight)px; 
-        border: 1px solid #000; 
+        height: @(Model.CinemaHallHeight)px;
+        border: 1px solid #000;
         margin: 0 auto
     }
 
@@ -31,14 +31,15 @@
 
                     @foreach (var row in area.Rows)
                     {
-                        <div class="crossword-row" row="@row.PhysicalName"
-                             >
+                        <div class="crossword-row" row="@row.PhysicalName">
                             @foreach (var seat in row.Seats)
                             {
-                                <div class="" id="@seat.Id" style="font-size: 8px;
-                                
-                                ">
-                            @seat.Position.RowIndex - @seat.Position.ColumnIndex</div>
+                                <div class="" id="@seat.Id" style="font-size: 8px; margin: 1px;
+                                     left: @(area.Width/area.ColumnCount * seat.Position.ColumnIndex)px;">
+                                    <div style="background: yellow;  height: @(area.Height/area.RowCount - 2)px;width: @(area.Width/area.ColumnCount -2)px;
+"></div>
+                                    @*@seat.Position.RowIndex - @seat.Position.ColumnIndex*@
+                                </div>
                             }
                         </div>
 

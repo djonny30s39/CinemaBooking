@@ -8,10 +8,8 @@
 
 .crossword-row > div {
     float: left;
-    text-align: center;    
-    border-bottom: 1px solid #aaa;
-    border-right: 1px solid #aaa;
-    background-color: #fff;
+    text-align: center;        
+    background-color: green;
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
