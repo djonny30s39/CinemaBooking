@@ -1,3 +1,54 @@
-﻿@{
+﻿@model CinemaBookingClient.ViewModels.CinemaSeatPlanViewModel
+
+@{
     ViewData["Title"] = "Booking";
 }
+<style>
+    #general-container
+    {
+        height: @(Model.CinemaHallHeight)px; 
+        border: 1px solid #000; 
+        margin: 0 auto
+    }
+
+    #area-container
+    {
+        margin: @(Model.BoundaryTop)px
+                @(Model.BoundaryRight)px
+                auto
+                @(Model.BoundaryLeft)px;
+    }
+</style>
+<div style="margin: 30px auto;">
+    <div id="general-container">
+        <div id="area-container">
+            @foreach (var area in Model.Areas)
+            {
+                <div style="margin-left: @(area.Left)px;
+                     margin-top: @(area.Top)px;
+                     background: green;
+                     height: @(area.Height)px">
+
+                    @foreach (var row in area.Rows)
+                    {
+                        <div class="crossword-row" row="@row.PhysicalName"
+                             >
+                            @foreach (var seat in row.Seats)
+                            {
+                                <div class="" id="@seat.Id" style="font-size: 8px;
+                                
+                                ">
+                            @seat.Position.RowIndex - @seat.Position.ColumnIndex</div>
+                            }
+                        </div>
+
+                    }
+
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+<button class="btn btn-success">Order</button>
+@*height: @((area.Height * Model.CinemaHallHeight) / 100)px;*@

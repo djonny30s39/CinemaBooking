@@ -36,26 +36,26 @@ namespace CinemaBookingClient.Models
     {
         public int AreaCategoryCode { get; set; }
         //количество мест по оси Х
-        public byte ColumnCount { get; set; }
+        public int ColumnCount { get; set; }
         public string Description { get; set; }
         public string DescriptionAlt { get; set; }
         public bool HasSofaSeatingEnabled { get; set; }
         //высота зоны
-        public byte Height { get; set; }
+        public int Height { get; set; }
         public bool IsAllocatedSeating { get; set; }
         //левая координата зоны
-        public byte Left { get; set; }
-        public byte Number { get; set; }
+        public int Left { get; set; }
+        public int Number { get; set; }
         //общее количество мест в зоне
         public int NumberOfSeats { get; set; }
         //количество рядов
-        public byte RowCount { get; set; }
+        public int RowCount { get; set; }
         //объект со списом рядов в рамках зоны
         public List<AreaRow> Rows { get; set; }
         //верхняя координата зоны
-        public byte Top { get; set; }
+        public int Top { get; set; }
         //ширина зоны
-        public byte Width { get; set; }
+        public int Width { get; set; }
     }
 
     /// <summary>

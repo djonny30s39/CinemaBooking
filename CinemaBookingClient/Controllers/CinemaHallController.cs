@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CinemaBookingClient.Services;
+using CinemaBookingClient.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,6 +13,8 @@ namespace CinemaBookingClient.Controllers
     public class CinemaHallController : Controller
     {
         private ICinemaSeatPlanWS seatPlan;
+        private readonly int CinemaHallWidth = 800;
+        private readonly int CinemaHallHeight = 600;
 
         public CinemaHallController(ICinemaSeatPlanWS seatPlan)
         {
@@ -20,9 +23,13 @@ namespace CinemaBookingClient.Controllers
         
         [HttpGet]
         public IActionResult CinemaHallPlan()
-        {
-            var result = seatPlan.GetCinemaSeatPlanAsync().Result;
-            return View();
+        {            
+            var cinemaHall = seatPlan.GetCinemaSeatPlanAsync().Result;
+            var cinemaHallVM = new CinemaSeatPlanViewModel(cinemaHall);
+            cinemaHallVM.CinemaHallWidth = CinemaHallWidth;
+            cinemaHallVM.CinemaHallHeight = CinemaHallHeight;
+            cinemaHallVM.CalculateRealCinemaHall();
+            return View("CinemaHallPlan", cinemaHallVM);
         }
 
         //// GET api/<controller>/5
