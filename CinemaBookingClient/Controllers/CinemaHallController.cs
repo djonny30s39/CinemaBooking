@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CinemaBookingClient.Models;
 using CinemaBookingClient.Services;
 using CinemaBookingClient.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CinemaBookingClient.Controllers
-{    
+{
     public class CinemaHallController : Controller
     {
         private ICinemaSeatPlanWS seatPlan;
@@ -39,11 +37,12 @@ namespace CinemaBookingClient.Controllers
         //    return "value";
         //}
 
-        //// POST api/<controller>
-        //[HttpPost]
-        //public void Post([FromBody]string value)
-        //{
-        //}
+        // POST api/<controller>
+        [HttpPost]
+        public void Post([FromBody]Seats seats)
+        {
+            List<Position> orderSeats = seats.Seat;
+        }
 
         //// PUT api/<controller>/5
         //[HttpPut("{id}")]
@@ -56,5 +55,11 @@ namespace CinemaBookingClient.Controllers
         //public void Delete(int id)
         //{
         //}
+        public class Seats
+        {
+            public List<Position> Seat{ get; set; }
+        }
     }
+
+    
 }

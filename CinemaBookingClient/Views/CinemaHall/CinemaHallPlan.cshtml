@@ -19,6 +19,97 @@
                 @(Model.BoundaryLeft)px;
     }
 </style>
+<script>
+    $(document).ready(
+        function () {
+            //var z;
+            var seats = [];
+            $(".crossword-row > div").click(function () {
+                if ($(this).find("div").hasClass("seat")) {
+                    var seat = $(this).find("div");
+                    var seatPos = $(seat).attr("seatPosition");
+                    var seatId = $(seat).attr("id");
+                    var objPos = seatPos.split('-');
+                    var objSeat = {
+                        "RowIndex": objPos[0],
+                        "ColumnIndex": objPos[1],
+                        "AreaNumber": objPos[2]
+                    };
+
+                    if ($(seat).hasClass("booked")) {
+                        $(seat).removeClass("booked").css("background", "yellow");
+                        //TODO delete seat from seats                        
+                        //seats = $.grep(seats, function (value) {
+                        //    return value != objSeat.value;
+                        //});
+                       alert(seats.length);
+                    }
+                    else {
+                        $(seat).css("background", "#000")
+                            .addClass("booked");
+                       
+                        //add objSeat to seats
+                        seats.push(objSeat);
+
+                        alert(seats.length);
+
+                       
+                        //for (var i = 0; i < seats.length; i++)
+                        //{
+                        //    var pos = seats[i].split('-');
+                        //    //var pos = position.split('-');
+                        //    var numTicketText = "Row: " + ++pos[0]
+                        //        + " Place:" + pos[1]
+                        //        + " Area:" + pos[2];
+                            
+                        //    //var $newdiv1 = $("<div></div>"),
+                        //    //    newdiv2 = document.createElement("div"),
+                        //    //    existingdiv1 = document.getElementById(seatId - 1);
+
+                        //    //$("body").append($newdiv1, [newdiv2, existingdiv1]);
+
+                        //    //$("#ordered_tickets").append("div")
+                        //    //$("#numver_ticket").text(numTicketText);
+                        //    //var priceTicketText;
+                        //    //if (numTicketText[3] == 1)
+                        //    //    priceTicketText = 70;
+                        //    //else
+                        //    //    priceTicketText = 100;
+                        //    //$("#price_ticket").text(priceTicketText + " UAN");
+                        //}
+                        
+                    }
+                }
+            });
+
+            //TODO change color on hover event
+            //$(".crossword-row > div").hover(function () {
+            //    if ($(this).find("div").hasClass("seat")) {
+            //        //$(this).attr("title");
+            //    }
+            //});           
+
+            $("#btnOrderTicket").on("click", function (event) {                               
+                var jsonStr = {
+                    "Seat": seats
+                };
+                alert(JSON.stringify(jsonStr));
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: '/CinemaHall/Post',
+                    data: JSON.stringify(jsonStr),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        alert(data);
+                    }
+                });
+            });
+
+        }
+    )
+</script>
+
 <div style="margin: 30px auto;">
     <div id="general-container">
         <div id="area-container">
@@ -34,15 +125,20 @@
                         <div class="crossword-row" row="@row.PhysicalName">
                             @foreach (var seat in row.Seats)
                             {
-                                <div class="" id="@seat.Id" style="font-size: 8px; margin: 1px;
-                                     left: @(area.Width/area.ColumnCount * seat.Position.ColumnIndex)px;">
-                                    <div style="background: yellow;  height: @(area.Height/area.RowCount - 2)px;width: @(area.Width/area.ColumnCount -2)px;
-"></div>
-                                    @*@seat.Position.RowIndex - @seat.Position.ColumnIndex*@
+                                <div class="conteiner_seat" id="@seat.Id" style="font-size: 8px; margin: 1px;
+                                     ">
+
+                                    <div class="seat"
+                                         seatPosition="@(seat.Position.RowIndex)-@(seat.Position.ColumnIndex)-@(seat.Position.AreaNumber)"
+                                         title="@(seat.Id)"
+                                         style="background: yellow;
+                                         height: @(area.Height/area.RowCount - 2)px;
+                                         width: @(area.Width/area.ColumnCount -2)px;">
+
+                                    </div>
                                 </div>
                             }
                         </div>
-
                     }
 
                 </div>
@@ -51,5 +147,8 @@
 
     </div>
 </div>
-<button class="btn btn-success">Order</button>
-@*height: @((area.Height * Model.CinemaHallHeight) / 100)px;*@
+
+@*info panel*@
+<div id="ordered_tickets"></div>
+
+<button class="btn btn-success" id="btnOrderTicket">Order Tickets</button>
