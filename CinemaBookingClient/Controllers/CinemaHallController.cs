@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CinemaBookingClient.Models;
 using CinemaBookingClient.Services;
 using CinemaBookingClient.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +14,7 @@ namespace CinemaBookingClient.Controllers
     public class CinemaHallController : Controller
     {
         private ICinemaSeatPlanWS seatPlan;
-        private readonly int CinemaHallWidth = 800;
-        private readonly int CinemaHallHeight = 600;
+        
 
         public CinemaHallController(ICinemaSeatPlanWS seatPlan)
         {
@@ -23,12 +23,8 @@ namespace CinemaBookingClient.Controllers
         
         [HttpGet]
         public IActionResult CinemaHallPlan()
-        {            
-            var cinemaHall = seatPlan.GetCinemaSeatPlanAsync().Result;
-            var cinemaHallVM = new CinemaSeatPlanViewModel(cinemaHall);
-            cinemaHallVM.CinemaHallWidth = CinemaHallWidth;
-            cinemaHallVM.CinemaHallHeight = CinemaHallHeight;
-            cinemaHallVM.CalculateRealCinemaHall();
+        {     
+            var cinemaHallVM = CinemaHallCreator.GetCinemaHallViewModel(seatPlan);
             return View("CinemaHallPlan", cinemaHallVM);
         }
 

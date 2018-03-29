@@ -4,52 +4,85 @@
     ViewData["Title"] = "Booking";
 }
 <style>
-    #general-container
+
+    #big-container
     {
-        height: @(Model.CinemaHallHeight)px;
-        border: 1px solid #000;
+        height: @(Model.CinemaHallBox.Height + Model.ScreenBox.Height)px;
+        width: @(Model.CinemaHallBox.Width )px;
+        border: 1px solid #00A;
+        margin: 0 auto
+    }
+    #screen-container
+    {
+        height: @(Model.ScreenBox.Height)px;
+        width: @(Model.ScreenBox.Width)px;
+        border: 1px solid #A00;
+        margin-left: @(Model.ScreenPos.Left)px;
+        margin-top: 0px;
+        background: cyan;
+    }
+    #hall-container
+    {
+        position: relative;
+        height: @(Model.CinemaHallBox.Height)px;
+        width: @(Model.CinemaHallBox.Width )px;
+        
         margin: 0 auto
     }
 
-    #area-container
-    {
-        margin: @(Model.BoundaryTop)px
-                @(Model.BoundaryRight)px
-                auto
-                @(Model.BoundaryLeft)px;
-    }
+
+
 </style>
 <div style="margin: 30px auto;">
-    <div id="general-container">
-        <div id="area-container">
+    <div id="big-container" class="big-container">
+        <div>
+            <div id="screen-container" class="screen-container">
+            </div>
+        </div>
+        <div id="hall-container" class="hall-container">
+            @*<div id="area-container"  style="position: absolute;"
+                >*@
             @foreach (var area in Model.Areas)
             {
-                <div style="margin-left: @(area.Left)px;
-                     margin-top: @(area.Top)px;
-                     background: green;
-                     height: @(area.Height)px">
+                <div style="
+                         position: absolute;
+                         left: @(area.AreaPos.Left)px;
+                         top: @(area.AreaPos.Top)px;
+                         height: @(area.AreaBox.Height)px;
+                         width: @(area.AreaBox.Width)px;
+                         background: magenta;
+                         border: 0px solid #00F;">
 
                     @foreach (var row in area.Rows)
                     {
-                        <div class="crossword-row" row="@row.PhysicalName">
+                        <div style="
+                                     position: absolute;
+                                     left: @(row.RowPos.Left)px;
+                                     top: @(row.RowPos.Top)px;
+                                     height: @(area.RowBox.Height)px;
+                                     width: @(area.RowBox.Width)px;
+                                     background: magenta;
+                                     border: 0px solid #0FF;">
                             @foreach (var seat in row.Seats)
                             {
-                                <div class="" id="@seat.Id" style="font-size: 8px; margin: 1px;
-                                     left: @(area.Width/area.ColumnCount * seat.Position.ColumnIndex)px;">
-                                    <div style="background: yellow;  height: @(area.Height/area.RowCount - 2)px;width: @(area.Width/area.ColumnCount -2)px;
-"></div>
-                                    @*@seat.Position.RowIndex - @seat.Position.ColumnIndex*@
-                                </div>
+                            <div style="
+                                     position: absolute;
+                                     left: @(seat.SeatPos.Left)px;
+                                     top: @(seat.SeatPos.Top)px;
+                                     height: @(area.SeatBox.Height)px;
+                                     width: @(area.SeatBox.Width)px;
+                                     background: yellow;
+                                     border: 1px solid #F0F;">
+                                @*@(seat.Position.ColumnIndex+1)*@
+                            </div>
                             }
                         </div>
-
                     }
 
                 </div>
             }
+            @*</div>*@
         </div>
-
     </div>
 </div>
-<button class="btn btn-success">Order</button>
-@*height: @((area.Height * Model.CinemaHallHeight) / 100)px;*@
+<button class="btn btn-success">Order</button> 
