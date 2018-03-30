@@ -14,5 +14,7 @@ namespace CinemaBookingClient.Models
         public string Name { get; set; }
 
         public ICollection<CinemaHall> CinemaHalls { get; set; }
+
+        public string Address { get; set; }
     }
 }

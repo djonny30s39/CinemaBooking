@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using CinemaBookingClient.Models;
+using CinemaBookingClient.Models.DataModel;
 
 namespace CinemaBookingClient.Data
 {
@@ -15,6 +16,7 @@ namespace CinemaBookingClient.Data
         public DbSet<CinemaHall> CinemaHalls { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Seances> Seances { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

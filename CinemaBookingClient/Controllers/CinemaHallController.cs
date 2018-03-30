@@ -1,4 +1,6 @@
-﻿using CinemaBookingClient.Models; 
+﻿using CinemaBookingClient.HardCode;
+using CinemaBookingClient.Models;
+using CinemaBookingClient.Models.DataModel;
 using CinemaBookingClient.Services;
 using CinemaBookingClient.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -17,41 +19,47 @@ namespace CinemaBookingClient.Controllers
     {
         private ICinemaSeatPlanWS seatPlan;
         private ICinemaDataService dataSevice;
-        private readonly UserManager<ApplicationUser> _userManager; 
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
         private string userId;
-        public CinemaHallController(ICinemaSeatPlanWS seatPlan, ICinemaDataService dataSevice, UserManager<ApplicationUser> userManager )
+
+        public CinemaHallController(ICinemaSeatPlanWS seatPlan, ICinemaDataService dataSevice, UserManager<ApplicationUser> userManager)
         {
             this.seatPlan = seatPlan;
             this.dataSevice = dataSevice;
-            _userManager = userManager;
+            this.userManager = userManager;
         }
-        
+
         [HttpGet]
         public IActionResult CinemaHallPlan()
         {
-            var user = _userManager.GetUserAsync(User).Result;
+            var user = userManager.GetUserAsync(User).Result;
             if (user == null)
             {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
             }
             string userId = user.Id;
             var cinemaHallVM = CinemaHallCreator.GetCinemaHallViewModel(seatPlan, dataSevice, userId);
             return View("CinemaHallPlan", cinemaHallVM);
         }
- 
-        //// GET api/<controller>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
 
-        // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]Seats seats)
+        public IActionResult Post([FromBody]Seats seats)
         {
+            if (!ModelState.IsValid)
+                return View();
+
+            var user = userManager.GetUserAsync(User).Result;
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+            }
+            string userId = user.Id;
             List<Position> orderSeats = seats.Seat;
+            var order = dataSevice.CreateOrder(userId, HardCodeValues.cinemaHallId, HardCodeValues.seanceId, orderSeats);
+
+            return RedirectToAction("CinemaHallPlan");
+
         }
 
         //// PUT api/<controller>/5
@@ -67,9 +75,9 @@ namespace CinemaBookingClient.Controllers
         //}
         public class Seats
         {
-            public List<Position> Seat{ get; set; }
-        } 
+            public List<Position> Seat { get; set; }
+        }
     }
 
-    
+
 }

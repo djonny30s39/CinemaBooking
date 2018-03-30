@@ -1,4 +1,5 @@
 ﻿using CinemaBookingClient.Models;
+using CinemaBookingClient.Models.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace CinemaBookingClient.Services
     {
         CinemaHall GetCinemaHall(int cinema_id, int cinemahall_id);
         Customer GetCustomer(string aspnetuser_id);
+        Order CreateOrder(string userId, int cinemaHallId, int seanceId, List<Position> seats);
         void SaveData(); 
     }
 }

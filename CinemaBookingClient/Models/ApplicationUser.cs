@@ -6,6 +6,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CinemaBookingClient.Models
 {
+    /*User 1 
+     * login: test@gmail.com
+     * pas: As12345*
+     * 
+     * User2
+     * login: test1@gmail.com
+     * pas: As12345*1
+    */
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {

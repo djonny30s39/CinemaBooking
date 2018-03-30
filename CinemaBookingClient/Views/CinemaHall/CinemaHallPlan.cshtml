@@ -1,5 +1,4 @@
 ﻿@model CinemaBookingClient.ViewModels.CinemaSeatPlanViewModel
-
 @{
     ViewData["Title"] = "Booking";
 }
@@ -35,8 +34,14 @@
         function () {
             //var z;
             var seats = [];
+            var removeSeats = [];
             $(".crossword-row > div").click(function () {
-                if ($(this).find("div").hasClass("seat")) { 
+                if ($(this).find("div").hasClass("booked"))
+                {
+                    return;
+                }
+
+                if ($(this).find("div").hasClass("seat")) {
                     var seat = $(this).find("div");
                     var seatPos = $(seat).attr("seatPosition");
                     var seatId = $(seat).attr("id");
@@ -47,17 +52,27 @@
                         "AreaNumber": objPos[2]
                     };
 
-                    if ($(seat).hasClass("booked")) {
-                        $(seat).removeClass("booked").css("background", "yellow");
-                        //TODO delete seat from seats
-                        //seats = $.grep(seats, function (value) {
-                        //    return value != objSeat.value;
-                        //});
+                    if ($(seat).hasClass("reserved")) {
+                        $(seat).removeClass("reserved");
+                        $(seat).find("div").css("background", "#33adff");
+                        //TODO delete seat from seats 
+                        delete seats.objSeat;
                         alert(seats.length);
                     }
+                    else if ($(seat).hasClass("cust-booked")) {
+                        $(seat).removeClass("cust-booked");
+                        $(seat).find("div").css("background", "#33adff");
+                        var obj = $.grep(removeSeats, function (obj)
+                        {
+                            return obj == objSeat;
+                        });
+                        if (obj != null)
+                            removeSeats.push(objSeat);
+                        alert(removeSeats.length);
+                    }
                     else {
-                        $(seat).css("background", "#000")
-                            .addClass("booked");
+                        $(seat).find("div").css("background", "#0047b3")
+                            .addClass("reserved");
 
                         //add objSeat to seats
                         seats.push(objSeat);
@@ -94,11 +109,13 @@
             });
 
             //TODO change color on hover event
-            //$(".crossword-row > div").hover(function () {
-            //    if ($(this).find("div").hasClass("seat")) {
-            //        //$(this).attr("title");
-            //    }
-            //});
+            $(".crossword-row > div").hover(function () {                
+                if ($(this).find("div").hasClass("booked"))
+                {
+                    var seat = $(this).find("div.seat").removeAttr("title");
+                    
+                }
+            });
 
             $("#btnOrderTicket").on("click", function (event) {
                 var jsonStr = {
@@ -121,13 +138,13 @@
     )
 </script>
 
-
 <div style="margin: 30px auto;">
     <div id="big-container" class="big-container">
         <div>
             <div id="screen-container" class="screen-container">
             </div>
         </div>
+
         <div id="hall-container" class="hall-container">
             @*<div id="area-container"  style="position: absolute;"
                 >*@
@@ -141,42 +158,43 @@
                          width: @(area.AreaBox.Width)px;
                          background: magenta;
                          border: 0px solid #00F;">
-
                     @foreach (var row in area.Rows)
                     {
-                    <div class="crossword-row" row="@row.PhysicalName"
-                         style=" position: absolute;
+                        <div class="crossword-row" row="@row.PhysicalName"
+                             style=" position: absolute;
                                      left: @(row.RowPos.Left)px;
                                      top: @(row.RowPos.Top)px;
                                      height: @(area.RowBox.Height)px;
                                      width: @(area.RowBox.Width)px;
-                                     background: magenta;
+                                     background: #e6f7ff;
                                      border: 0px solid #0FF;">
-                        @foreach (var seat in row.Seats)
-    {
-                     var color = seat.Booked ?(seat.CustomerBooked ? "blue" : "brown"): "yellow";
-                            
-                    <div class="conteiner_seat" id="@seat.Id" style="font-size: 8px; margin: 1px;">
-                        <div class="seat"
-                             seatPosition="@(seat.Position.RowIndex)-@(seat.Position.ColumnIndex)-@(seat.Position.AreaNumber)"
-                             title="@(seat.Id)"
-                             style=" position: absolute;
+                            @foreach (var seat in row.Seats)
+                            {
+                                var color = seat.Booked ? (seat.CustomerBooked ? "yellow" : "#b3b3cc") : "#33adff";
+                                var booked = seat.Booked ? (seat.CustomerBooked ? "cust-booked" : "booked") : "free";
+                                var price = area.AreaCategoryCode == 0000000003 ? "70 UAN" : "100 UAN";
+                                <div class="conteiner_seat" id="@seat.Id" style="font-size: 8px; margin: 1px;">
+                                    <div class="seat @booked"
+                                         seatPosition="@(seat.Position.RowIndex)-@(seat.Position.ColumnIndex)-@(seat.Position.AreaNumber)"
+                                         title="@price"
+                                         style=" position: absolute;
                                              left: @(seat.SeatPos.Left)px;
                                              top: @(seat.SeatPos.Top)px;
                                              height: @(area.SeatBox.Height)px;
                                              width: @(area.SeatBox.Width)px;
-                                             background: @color;
-                                             border: 1px solid #F0F;">
-                            @*@(seat.Position.ColumnIndex+1)*@
+                                             ">
+                                        <div style="background: @color;
+                                             border-radius: 4px;
+                                             margin: 1px; height: @(area.SeatBox.Height - 2)px;
+                                             width: @(area.SeatBox.Width -2)px;"></div>
+                                        @*@(seat.Position.ColumnIndex+1)*@
+                                    </div>
+                                </div>
+                            }
                         </div>
-                    </div>
-}
-                    </div>
-}
-
-                    </div>
+                    }
+                </div>
             }
-            @*</div>*@
         </div>
     </div>
 </div>
