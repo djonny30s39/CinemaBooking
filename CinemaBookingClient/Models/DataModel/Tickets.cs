@@ -6,16 +6,21 @@ using System.Threading.Tasks;
 
 namespace CinemaBookingClient.Models
 {
-    public class Tickets
+    public class Ticket
     {
         public int Id { get; set; }
 
         [Required]
-        public int Order_Id { get; set; }
+        public int OrderId { get; set; }
+        [Required]
+        public Order Order { get; set; }
+
 
         [Required]
-        public int CinemaHall_Id { get; set; }
-        
+        public int CinemaHallId { get; set; }
+        [Required]
+        public CinemaHall CinemaHall { get; set; }
+
         public string AreaNumber { get; set; }
 
         [Required]

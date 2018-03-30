@@ -61,6 +61,8 @@ namespace CinemaBookingClient.ViewModels
         //статус места. 0 - свободно. 1 - занято.
         public byte Status { get; set; }
         public VMPosPx SeatPos { get; internal set; } = new VMPosPx();
+        public bool Booked { get; set; } = false;
+        public bool CustomerBooked { get; set; } = false;
     }
 
     public class VMPosition

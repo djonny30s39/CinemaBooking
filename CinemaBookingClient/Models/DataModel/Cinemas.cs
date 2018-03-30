@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace CinemaBookingClient.Models
 {
-    public class Cinemas
+    public class Cinema
     {
         public int Id { get; set; }
 
         [Required, MaxLength(80)]
         public string Name { get; set; }
+
+        public ICollection<CinemaHall> CinemaHalls { get; set; }
     }
 }

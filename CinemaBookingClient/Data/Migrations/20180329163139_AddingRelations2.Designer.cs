@@ -11,9 +11,10 @@ using System;
 namespace CinemaBookingClient.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180329163139_AddingRelations2")]
+    partial class AddingRelations2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,13 +135,11 @@ namespace CinemaBookingClient.Data.Migrations
 
                     b.Property<int>("CinemaId");
 
-                    b.Property<int>("CustomerId");
-
                     b.Property<DateTime>("OrderDate");
 
-                    b.HasKey("Id");
+                    b.Property<int>("UserId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasKey("Id");
 
                     b.ToTable("Orders");
                 });
@@ -282,14 +281,6 @@ namespace CinemaBookingClient.Data.Migrations
                     b.HasOne("CinemaBookingClient.Models.Cinema")
                         .WithMany("CinemaHalls")
                         .HasForeignKey("CinemaId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CinemaBookingClient.Models.Order", b =>
-                {
-                    b.HasOne("CinemaBookingClient.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

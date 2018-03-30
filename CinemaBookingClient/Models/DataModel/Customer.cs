@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CinemaBookingClient.Models
 {
-    public class Users
+    public class Customer
     {        
         public int Id { get; set; }
 
@@ -15,7 +15,7 @@ namespace CinemaBookingClient.Models
 
         [MaxLength(30)]
         public string LastName { get; set; }
-
-        public int AspNetUsers_Id { get; set; }
+        [Required, MaxLength(450)]
+        public string AspNetUsers_Id { get; set; }
     }
 }

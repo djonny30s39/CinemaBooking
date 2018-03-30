@@ -11,9 +11,10 @@ using System;
 namespace CinemaBookingClient.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180329142918_AspNetUserNvchar")]
+    partial class AspNetUserNvchar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,18 +91,15 @@ namespace CinemaBookingClient.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CinemaId");
+                    b.Property<int>("Cinema_Id");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(80);
 
-                    b.Property<string>("Schema_Url")
-                        .IsRequired();
+                    b.Property<int>("Schema_Url");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CinemaId");
 
                     b.ToTable("CinemaHalls");
                 });
@@ -132,15 +130,13 @@ namespace CinemaBookingClient.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CinemaId");
-
-                    b.Property<int>("CustomerId");
+                    b.Property<int>("Cinema_Id");
 
                     b.Property<DateTime>("OrderDate");
 
-                    b.HasKey("Id");
+                    b.Property<int>("User_Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasKey("Id");
 
                     b.ToTable("Orders");
                 });
@@ -152,19 +148,15 @@ namespace CinemaBookingClient.Data.Migrations
 
                     b.Property<string>("AreaNumber");
 
-                    b.Property<int>("CinemaHallId");
+                    b.Property<int>("CinemaHall_Id");
 
                     b.Property<int>("ColumnIndex");
 
-                    b.Property<int>("OrderId");
+                    b.Property<int>("Order_Id");
 
                     b.Property<int>("RowIndex");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CinemaHallId");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Tickets");
                 });
@@ -275,35 +267,6 @@ namespace CinemaBookingClient.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("CinemaBookingClient.Models.CinemaHall", b =>
-                {
-                    b.HasOne("CinemaBookingClient.Models.Cinema")
-                        .WithMany("CinemaHalls")
-                        .HasForeignKey("CinemaId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CinemaBookingClient.Models.Order", b =>
-                {
-                    b.HasOne("CinemaBookingClient.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CinemaBookingClient.Models.Ticket", b =>
-                {
-                    b.HasOne("CinemaBookingClient.Models.CinemaHall")
-                        .WithMany("Tickets")
-                        .HasForeignKey("CinemaHallId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CinemaBookingClient.Models.Order")
-                        .WithMany("Tickets")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

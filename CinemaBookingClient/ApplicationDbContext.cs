@@ -10,7 +10,11 @@ namespace CinemaBookingClient.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<Users> Users { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Cinema> Cinemas { get; set; }
+        public DbSet<CinemaHall> CinemaHalls { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

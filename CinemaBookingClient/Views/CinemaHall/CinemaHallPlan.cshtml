@@ -154,21 +154,23 @@
                                      border: 0px solid #0FF;">
                         @foreach (var seat in row.Seats)
     {
-                        <div class="conteiner_seat" id="@seat.Id" style="font-size: 8px; margin: 1px;">
-                            <div class="seat"
-                                 seatPosition="@(seat.Position.RowIndex)-@(seat.Position.ColumnIndex)-@(seat.Position.AreaNumber)"
-                                 title="@(seat.Id)"
-                                 style=" position: absolute;
+                     var color = seat.Booked ?(seat.CustomerBooked ? "blue" : "brown"): "yellow";
+                            
+                    <div class="conteiner_seat" id="@seat.Id" style="font-size: 8px; margin: 1px;">
+                        <div class="seat"
+                             seatPosition="@(seat.Position.RowIndex)-@(seat.Position.ColumnIndex)-@(seat.Position.AreaNumber)"
+                             title="@(seat.Id)"
+                             style=" position: absolute;
                                              left: @(seat.SeatPos.Left)px;
                                              top: @(seat.SeatPos.Top)px;
                                              height: @(area.SeatBox.Height)px;
                                              width: @(area.SeatBox.Width)px;
-                                             background: yellow;
+                                             background: @color;
                                              border: 1px solid #F0F;">
-                                @*@(seat.Position.ColumnIndex+1)*@
-                            </div>
+                            @*@(seat.Position.ColumnIndex+1)*@
                         </div>
-                        }
+                    </div>
+}
                     </div>
 }
 

@@ -11,9 +11,10 @@ using System;
 namespace CinemaBookingClient.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180329134428_AddingAll")]
+    partial class AddingAll
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,49 +72,12 @@ namespace CinemaBookingClient.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("CinemaBookingClient.Models.Cinema", b =>
+            modelBuilder.Entity("CinemaBookingClient.Models.Users", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(80);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Cinemas");
-                });
-
-            modelBuilder.Entity("CinemaBookingClient.Models.CinemaHall", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("CinemaId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(80);
-
-                    b.Property<string>("Schema_Url")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CinemaId");
-
-                    b.ToTable("CinemaHalls");
-                });
-
-            modelBuilder.Entity("CinemaBookingClient.Models.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("AspNetUsers_Id")
-                        .IsRequired()
-                        .HasMaxLength(450);
+                    b.Property<int>("AspNetUsers_Id");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -124,49 +88,7 @@ namespace CinemaBookingClient.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("CinemaBookingClient.Models.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("CinemaId");
-
-                    b.Property<int>("CustomerId");
-
-                    b.Property<DateTime>("OrderDate");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("CinemaBookingClient.Models.Ticket", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("AreaNumber");
-
-                    b.Property<int>("CinemaHallId");
-
-                    b.Property<int>("ColumnIndex");
-
-                    b.Property<int>("OrderId");
-
-                    b.Property<int>("RowIndex");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CinemaHallId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("Tickets");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -275,35 +197,6 @@ namespace CinemaBookingClient.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("CinemaBookingClient.Models.CinemaHall", b =>
-                {
-                    b.HasOne("CinemaBookingClient.Models.Cinema")
-                        .WithMany("CinemaHalls")
-                        .HasForeignKey("CinemaId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CinemaBookingClient.Models.Order", b =>
-                {
-                    b.HasOne("CinemaBookingClient.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CinemaBookingClient.Models.Ticket", b =>
-                {
-                    b.HasOne("CinemaBookingClient.Models.CinemaHall")
-                        .WithMany("Tickets")
-                        .HasForeignKey("CinemaHallId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CinemaBookingClient.Models.Order")
-                        .WithMany("Tickets")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

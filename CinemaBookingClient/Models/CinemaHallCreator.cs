@@ -11,14 +11,16 @@ namespace CinemaBookingClient.Models
     // todo seats not implemented
     public class CinemaHallCreator
     {
-        private static readonly int screenHeight = 8;
-        //private static readonly int cinemaHallWidth = 800;
-        //private static readonly int cinemaHallHeight = 600;
-        private static readonly int cinemaHallWidth = 800;
-        private static readonly int cinemaHallHeight = 600;
+        private static readonly int screenHeight = 8; 
+        private static readonly int cinemaHallWidth = 900;
+        private static readonly int cinemaHallHeight = 900; 
+        private static readonly int cinemaHallId = 2;
+        private static readonly int cinemaId = 1;
 
-        public static CinemaSeatPlanViewModel GetCinemaHallViewModel(ICinemaSeatPlanWS seatPlan)
+        public static CinemaSeatPlanViewModel GetCinemaHallViewModel(ICinemaSeatPlanWS seatPlan, ICinemaDataService dataSevice, string userID)
         {
+            var cinemaHallModel = dataSevice.GetCinemaHall(cinemaId, cinemaHallId);
+            var tickets = cinemaHallModel.Tickets;
             float unitW = (float)cinemaHallWidth / 100;
             float unitH = (float)cinemaHallHeight / 100;
             var cinemaHall = seatPlan.GetCinemaSeatPlanAsync().Result;
@@ -66,6 +68,15 @@ namespace CinemaBookingClient.Models
                         seat.Position = new VMPosition { AreaNumber = s.Position.AreaNumber, ColumnIndex = s.Position.ColumnIndex, RowIndex = s.Position.RowIndex };
                         seat.SeatPos.Left = area.SeatBox.Width * seat.Position.ColumnIndex;
                         seat.SeatPos.Top = 0;
+                        // booked?
+                        var ticket = tickets.FirstOrDefault(t => t.AreaNumber == seat.Position.AreaNumber.ToString() && 
+                            t.ColumnIndex == seat.Position.ColumnIndex && t.RowIndex == seat.Position.RowIndex);
+                        if (ticket != null)
+                        {
+                            seat.Booked = true;
+                            if (ticket.Order.Customer.AspNetUsers_Id == userID)
+                                seat.CustomerBooked = true;
+                        }
                         row.Seats.Add(seat);
                     }
                         area.Rows.Add(row);

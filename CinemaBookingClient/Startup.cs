@@ -28,7 +28,8 @@ namespace CinemaBookingClient
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+             
+            services.AddScoped<ICinemaDataService, SqlCinemaDataService>();
             services.AddScoped<ICinemaSeatPlanWS, CinemaSeatPlanWS>();
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

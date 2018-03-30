@@ -13,7 +13,7 @@ namespace CinemaBookingClient.Services
 {
     public class CinemaSeatPlanWS : ICinemaSeatPlanWS
     {
-        private IConfiguration Configuration { get; }        
+        private IConfiguration Configuration { get; } 
 
         public CinemaSeatPlanWS(IConfiguration configuration)
         {
