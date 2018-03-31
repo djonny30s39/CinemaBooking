@@ -24,17 +24,20 @@ namespace CinemaBookingClient.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly ICinemaDataService dataService;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger, 
+            ICinemaDataService dataService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            this.dataService = dataService;
         }
 
         [TempData]
@@ -232,6 +235,7 @@ namespace CinemaBookingClient.Controllers
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
+                    dataService.CreateCustomer(user.Id);
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);

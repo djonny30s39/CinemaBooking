@@ -14,6 +14,8 @@ namespace CinemaBookingClient.Models
             ICinemaDataService dataSevice, string userID)
         {
             var cinemaHallModel = dataSevice.GetCinemaHall(HardCodeValues.cinemaId, HardCodeValues.cinemaHallId);
+            if (cinemaHallModel == null)
+                return null;
             var tickets = cinemaHallModel.Tickets;
             float unitW = (float)HardCodeValues.cinemaHallWidth / 100;
             float unitH = (float)HardCodeValues.cinemaHallHeight / 100;
@@ -71,7 +73,8 @@ namespace CinemaBookingClient.Models
                         {
                             seat.Booked = true;
                             if (ticket.Order.Customer.AspNetUsersId == userID)
-                                seat.CustomerBooked = true;
+                                //if (ticket.Order.Customer.Id == userID)
+                                    seat.CustomerBooked = true;
                         }
                         row.Seats.Add(seat);
                     }

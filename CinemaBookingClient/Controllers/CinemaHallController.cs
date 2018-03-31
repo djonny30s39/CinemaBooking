@@ -1,15 +1,11 @@
 ﻿using CinemaBookingClient.HardCode;
 using CinemaBookingClient.Models;
-using CinemaBookingClient.Models.DataModel;
 using CinemaBookingClient.Services;
-using CinemaBookingClient.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 // pwd Aa123456!
 namespace CinemaBookingClient.Controllers
@@ -44,10 +40,11 @@ namespace CinemaBookingClient.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]Seats seats)
+        public JsonResult Post([FromBody]Seats seats)
         {
+            string url = Url.Action("CinemaHallPlan");
             if (!ModelState.IsValid)
-                return View();
+                return Json(new { success = false, url });
 
             var user = userManager.GetUserAsync(User).Result;
             if (user == null)
@@ -57,8 +54,8 @@ namespace CinemaBookingClient.Controllers
             string userId = user.Id;
             List<Position> orderSeats = seats.Seat;
             var order = dataSevice.CreateOrder(userId, HardCodeValues.cinemaHallId, HardCodeValues.seanceId, orderSeats);
-
-            return RedirectToAction("CinemaHallPlan");
+                        
+            return Json(new { success = true,  url });
 
         }
 

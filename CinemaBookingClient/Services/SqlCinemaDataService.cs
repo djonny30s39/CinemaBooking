@@ -45,6 +45,7 @@ namespace CinemaBookingClient.Services
                 SeanceId = seanceId,
                 OrderDate = DateTime.Now
             };
+            //currentUser.Orders.Add(order);
             context.Orders.Add(order);
             SaveData();
 
@@ -66,9 +67,22 @@ namespace CinemaBookingClient.Services
             return order;
         }
 
+        public Customer CreateCustomer(string id)
+        {
+            var customer = new Customer
+            {
+                AspNetUsersId = id
+            };
+            context.Customers.Add(customer);
+            SaveData();
+            return customer;
+        }
+
         public void SaveData()
         {
             context.SaveChanges();
         }
+
+        
     }
 }

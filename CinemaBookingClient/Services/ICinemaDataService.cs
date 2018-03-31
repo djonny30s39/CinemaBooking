@@ -12,6 +12,7 @@ namespace CinemaBookingClient.Services
         CinemaHall GetCinemaHall(int cinema_id, int cinemahall_id);
         Customer GetCustomer(string aspnetuser_id);
         Order CreateOrder(string userId, int cinemaHallId, int seanceId, List<Position> seats);
-        void SaveData(); 
+        void SaveData();
+        Customer CreateCustomer(string id);
     }
 }

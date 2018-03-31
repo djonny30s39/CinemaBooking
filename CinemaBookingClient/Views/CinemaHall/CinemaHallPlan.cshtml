@@ -129,7 +129,11 @@
                     data: JSON.stringify(jsonStr),
                     contentType: 'application/json',
                     success: function (data) {
-                        alert(data);
+                        if (data) {
+                            if (data.success) {
+                                window.location.reload(data.url);
+                            }
+                        }
                     }
                 });
             });
