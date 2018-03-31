@@ -55,9 +55,11 @@
                     if ($(seat).hasClass("reserved")) {
                         $(seat).removeClass("reserved");
                         $(seat).find("div").css("background", "#33adff");
-                        //TODO delete seat from seats 
-                        delete seats.objSeat;
-                        alert(seats.length);
+                        //TODO delete seat from seats  
+                        var index = seats.findIndex(s => s.RowIndex == objSeat.RowIndex && s.ColumnIndex == objSeat.ColumnIndex && s.AreaNumber == objSeat.AreaNumber); 
+                        alert(index);
+                        delete seats[index];
+                       
                     }
                     else if ($(seat).hasClass("cust-booked")) {
                         $(seat).removeClass("cust-booked");
@@ -74,10 +76,11 @@
                         $(seat).find("div").css("background", "#0047b3")
                             .addClass("reserved");
 
-                        //add objSeat to seats
-                        seats.push(objSeat);
+                        
+                        alert(JSON.stringify(objSeat) );
 
-                        alert(seats.length);
+                        seats.push(objSeat); 
+                        //alert(seats.length);
 
 
                         //for (var i = 0; i < seats.length; i++)
@@ -121,6 +124,7 @@
                 var jsonStr = {
                     "Seat": seats
                 };
+                
                 alert(JSON.stringify(jsonStr));
                 $.ajax({
                     type: 'POST',

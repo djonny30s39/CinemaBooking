@@ -35,8 +35,13 @@ namespace CinemaBookingClient.Services
             return customer;
         }
 
-        public Order CreateOrder(string userId, int cinemaHallId, int seanceId, List<Position> seats)
+        public Order CreateOrder(string userId, int cinemaHallId, int seanceId, List<Position> requestedSeats)
         {
+            if (requestedSeats == null)
+                return null;
+            var seats = requestedSeats.Where(z => z != null);
+            if (seats.Count() == 0)
+                return null;
             var currentUser = context.Customers.FirstOrDefault(z=> z.AspNetUsersId == userId);
             Order order = new Order
             {
@@ -49,7 +54,7 @@ namespace CinemaBookingClient.Services
             context.Orders.Add(order);
             SaveData();
 
-            foreach (var t in seats)
+            foreach (var t in seats )
             {
                 Ticket ticket = new Ticket
                 {
@@ -83,6 +88,9 @@ namespace CinemaBookingClient.Services
             context.SaveChanges();
         }
 
-        
+        public Order RemoveSeats(string userId, int cinemaHallId, int seanceId, List<Position> rejectedSeats)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
