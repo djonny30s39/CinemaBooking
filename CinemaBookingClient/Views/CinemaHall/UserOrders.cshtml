@@ -1,7 +1,21 @@
-﻿
+﻿@model IEnumerable<Order>
 @{
     ViewData["Title"] = "UserOrders";
 }
 
-<h2>UserOrders</h2>
+<h2>UserOrders for @(ViewData["User"]) </h2>
+
+<div>
+    @foreach (var order in Model)
+    {
+    <div>
+        <span> @order.Seance.Date</span>
+        <span> @order.Seance.Time</span>
+        <span> @order.Seance.CinemaHall.Cinema.Name</span>
+        <span> @order.Seance.CinemaHall.Name</span>
+        <span> @order.OrderDate</span> 
+        <span> @order.Tickets.Count</span>
+    </div>
+    }
+</div>
 

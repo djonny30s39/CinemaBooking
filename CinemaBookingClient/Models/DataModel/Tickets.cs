@@ -18,11 +18,11 @@ namespace CinemaBookingClient.Models
         public Order Order { get; set; }
 
 
-        [Required]
-        [ForeignKey("CinemaHall")]
-        public int CinemaHallId { get; set; }
-        [Required]
-        public CinemaHall CinemaHall { get; set; }
+        //[Required]
+        //[ForeignKey("CinemaHall")]
+        //public int CinemaHallId { get; set; }
+        //[Required]
+        //public CinemaHall CinemaHall { get; set; }
 
         public int AreaNumber { get; set; }
 

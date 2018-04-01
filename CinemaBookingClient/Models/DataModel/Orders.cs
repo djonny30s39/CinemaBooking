@@ -17,9 +17,13 @@ namespace CinemaBookingClient.Models
         [Required]
         public Customer Customer { get; set; }
 
-        [ForeignKey("CinemaHall")]
-        public int CinemaHallId { get; set; }
-        public int SeanceId { get; set; }
+        //[ForeignKey("CinemaHall")]
+        //public int CinemaHallId { get; set; }
+        
+        //public CinemaHall CinemaHall { get; set; }
+        
+        public int SeanceId { get; set; } 
+        public Seance Seance { get; set; }
 
         //[Required]
         public DateTime OrderDate { get; set; }        

@@ -3,10 +3,11 @@ using CinemaBookingClient.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace CinemaBookingClient.Services
 {
-    public class SqlCinemaDataService :ICinemaDataService
+    public class SqlCinemaDataService : ICinemaDataService
     {
         private ApplicationDbContext context;
         public SqlCinemaDataService(ApplicationDbContext context)
@@ -16,16 +17,7 @@ namespace CinemaBookingClient.Services
 
         public CinemaHall GetCinemaHall(int cinema_id, int cinemahall_id)
         {
-            CinemaHall hall = context.CinemaHalls.FirstOrDefault(c => c.CinemaId == cinema_id && c.Id == cinemahall_id);
-            if (hall != null)
-            { 
-                context.Entry(hall).Collection(h => h.Tickets).Load();
-                foreach (var ticket in hall.Tickets)
-                {
-                    context.Entry(ticket).Reference(t => t.Order).Load();
-                    context.Entry(ticket.Order).Reference(z => z.Customer).Load();
-                } 
-            }
+            CinemaHall hall = context.CinemaHalls.FirstOrDefault(c => c.CinemaId == cinema_id && c.Id == cinemahall_id); 
             return hall;
         }
 
@@ -35,20 +27,48 @@ namespace CinemaBookingClient.Services
             return customer;
         }
 
+        public IEnumerable<Order> GetOrders(string aspnetuser_id)
+        {
+            Customer customer = GetCustomer(aspnetuser_id);
+            if (customer == null)
+                return null;
+            //context.Entry(customer).Collection(c => c.Orders).Load();  
+            var orders = context.Orders
+                       .Where(b => b.CustomerId == customer.Id)
+                       .Include(b => b.Seance)
+                       .ThenInclude(bb => bb.CinemaHall)
+                        .ThenInclude(bb => bb.Cinema)
+                       .Include(b => b.Tickets)
+                       .ToList();
+            return orders;
+        }
+
+        public IEnumerable<Ticket> GetSeanceTickets(int seanceID)
+        {
+            var tickets = context.Tickets
+                      .Where(b => b.Order.SeanceId == seanceID)
+                      .Include(b => b.Order)
+                      .ThenInclude(bb => bb.Customer)
+                      .Include(b => b.Order)
+                      .ThenInclude(bb => bb.Seance)  
+                      .ToList();
+            return tickets;
+        }
+
         public Order CreateOrder(string userId, int cinemaHallId, int seanceId, IEnumerable<Position> requestedSeats)
         {
-            
+
             if (requestedSeats == null)
                 return null;
             var seats = requestedSeats.Where(z => z != null);
             if (seats.Count() == 0)
                 return null;
             HashSet<Position> toAdd = new HashSet<Position>(seats);
-            var currentUser = context.Customers.FirstOrDefault(z=> z.AspNetUsersId == userId);
+            var currentUser = context.Customers.FirstOrDefault(z => z.AspNetUsersId == userId);
             Order order = new Order
             {
                 CustomerId = currentUser.Id,
-                CinemaHallId = cinemaHallId,
+                //CinemaHallId = cinemaHallId,
                 SeanceId = seanceId,
                 OrderDate = DateTime.Now
             };
@@ -63,11 +83,11 @@ namespace CinemaBookingClient.Services
                     AreaNumber = t.AreaNumber,
                     RowIndex = t.RowIndex,
                     ColumnIndex = t.ColumnIndex,
-                    CinemaHallId = cinemaHallId,
-                    OrderId = order.Id                    
+                    //CinemaHallId = cinemaHallId,
+                    OrderId = order.Id
                 };
-                context.Tickets.Add(ticket);  
-                order.Tickets.Add(ticket);                
+                context.Tickets.Add(ticket);
+                order.Tickets.Add(ticket);
             }
             SaveData();
 
@@ -92,30 +112,30 @@ namespace CinemaBookingClient.Services
                 return 0;
             var seats = removeSeats.Where(z => z != null);
             if (seats.Count() == 0)
-                return 0; 
+                return 0;
             HashSet<Position> toRemove = new HashSet<Position>(seats);
-            foreach (var pos in toRemove) 
+            foreach (var pos in toRemove)
             {
                 Ticket ticket = context.Tickets.FirstOrDefault(t => t.AreaNumber == pos.AreaNumber && t.ColumnIndex == pos.ColumnIndex && t.RowIndex == pos.RowIndex);
                 if (ticket != null)
-                { 
+                {
                     context.Tickets.Remove(ticket);
                     SaveData();
                     cnt++;
                 }
-            } 
+            }
             return cnt;
         }
 
         public Order RecompileOrders(string userId, int cinemaHallId, int seanceId, IEnumerable<Position> addSeats, IEnumerable<Position> removeSeats)
         {
-            var duplicates = 
-                addSeats.Where(p => removeSeats.Any(p2 => p2.AreaNumber == p.AreaNumber && p2.ColumnIndex == p.ColumnIndex && p2.RowIndex == p.RowIndex));
+            var duplicates =
+                addSeats.Where(p =>p!=null && removeSeats.Any(p2 => p != null && p2.AreaNumber == p.AreaNumber && p2.ColumnIndex == p.ColumnIndex && p2.RowIndex == p.RowIndex));
 
             var toAdd = addSeats.Where(p => !duplicates.Any(p2 => p2.AreaNumber == p.AreaNumber && p2.ColumnIndex == p.ColumnIndex && p2.RowIndex == p.RowIndex));
-            var toRemove = removeSeats.Where(p => !duplicates.Any(p2 => p2.AreaNumber == p.AreaNumber && p2.ColumnIndex == p.ColumnIndex && p2.RowIndex == p.RowIndex)); 
+            var toRemove = removeSeats.Where(p => !duplicates.Any(p2 => p2.AreaNumber == p.AreaNumber && p2.ColumnIndex == p.ColumnIndex && p2.RowIndex == p.RowIndex));
 
-            CancelTickets(userId, cinemaHallId, seanceId, toRemove); 
+            CancelTickets(userId, cinemaHallId, seanceId, toRemove);
             return CreateOrder(userId, cinemaHallId, seanceId, toAdd);
         }
 
@@ -124,5 +144,6 @@ namespace CinemaBookingClient.Services
             context.SaveChanges();
         }
 
+        
     }
 }

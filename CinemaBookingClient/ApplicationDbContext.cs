@@ -16,7 +16,7 @@ namespace CinemaBookingClient.Data
         public DbSet<CinemaHall> CinemaHalls { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
-        public DbSet<Seances> Seances { get; set; }
+        public DbSet<Seance> Seances { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

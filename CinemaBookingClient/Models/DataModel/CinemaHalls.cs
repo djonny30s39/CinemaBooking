@@ -16,11 +16,12 @@ namespace CinemaBookingClient.Models
 
         [Required]
         [ForeignKey("Cinemas")]
-        public int CinemaId { get; set; }
+        public int CinemaId { get; set; } 
+        public Cinema Cinema { get; set; }
 
         [Required]
         public string Schema_Url { get; set; }
 
-        public ICollection<Ticket> Tickets { get; set; }
+        //public ICollection<Ticket> Tickets { get; set; }
     }
 }

@@ -11,12 +11,16 @@ namespace CinemaBookingClient.Models
     public class CinemaHallCreator
     { 
         public static CinemaSeatPlanViewModel GetCinemaHallViewModel(ICinemaSeatPlanWS seatPlan, 
-            ICinemaDataService dataSevice, string userID)
+            ICinemaDataService dataSevice, string userID, int? seanceId)
         {
             var cinemaHallModel = dataSevice.GetCinemaHall(HardCodeValues.cinemaId, HardCodeValues.cinemaHallId);
             if (cinemaHallModel == null)
                 return null;
-            var tickets = cinemaHallModel.Tickets;
+            IEnumerable<Ticket> tickets;
+            if (seanceId.HasValue)
+                tickets = dataSevice.GetSeanceTickets(seanceId.Value);
+            else
+                tickets = null;
             float unitW = (float)HardCodeValues.cinemaHallWidth / 100;
             float unitH = (float)HardCodeValues.cinemaHallHeight / 100;
             var cinemaHall = seatPlan.GetCinemaSeatPlanAsync().Result;

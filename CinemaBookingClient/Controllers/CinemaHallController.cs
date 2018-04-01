@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-// pwd Aa123456!
+ 
 namespace CinemaBookingClient.Controllers
 {
     [Authorize]
@@ -15,15 +15,27 @@ namespace CinemaBookingClient.Controllers
     {
         private ICinemaSeatPlanWS seatPlan;
         private ICinemaDataService dataSevice;
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly SignInManager<ApplicationUser> signInManager;
-        private string userId;
+        private readonly UserManager<ApplicationUser> userManager;   
 
         public CinemaHallController(ICinemaSeatPlanWS seatPlan, ICinemaDataService dataSevice, UserManager<ApplicationUser> userManager)
         {
             this.seatPlan = seatPlan;
             this.dataSevice = dataSevice;
             this.userManager = userManager;
+        }
+
+        [HttpGet]
+        public IActionResult UserOrders()
+        {
+            var user = userManager.GetUserAsync(User).Result;
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
+            }
+            string userId = user.Id;
+            ViewData["User"] = user.UserName;
+            var orders = dataSevice.GetOrders(userId);
+            return View("UserOrders", orders);
         }
 
         [HttpGet]
@@ -35,7 +47,7 @@ namespace CinemaBookingClient.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
             }
             string userId = user.Id;
-            var cinemaHallVM = CinemaHallCreator.GetCinemaHallViewModel(seatPlan, dataSevice, userId);
+            var cinemaHallVM = CinemaHallCreator.GetCinemaHallViewModel(seatPlan, dataSevice, userId, HardCodeValues.seanceId);
             return View("CinemaHallPlan", cinemaHallVM);
         }
 
@@ -53,25 +65,14 @@ namespace CinemaBookingClient.Controllers
             }
             string userId = user.Id;
             List<Position> addedSeats = seats.AddedPositions;
-            List<Position> removedSeats = seats.RemovedPositions;
-            //var order = dataSevice.CreateOrder(userId, HardCodeValues.cinemaHallId, HardCodeValues.seanceId, addedSeats);
+            List<Position> removedSeats = seats.RemovedPositions; 
             var order = dataSevice.RecompileOrders(userId, HardCodeValues.cinemaHallId, HardCodeValues.seanceId, addedSeats, removedSeats);
 
             return Json(new { success = true,  url });
 
         }
 
-        //// PUT api/<controller>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
-
-        //// DELETE api/<controller>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+         
         public class Seats
         {
             public List<Position> AddedPositions { get; set; }

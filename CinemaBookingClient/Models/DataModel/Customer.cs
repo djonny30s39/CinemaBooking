@@ -16,5 +16,7 @@ namespace CinemaBookingClient.Models
         [ForeignKey("AspNetUsers")]
         public string AspNetUsersId { get; set; }
 
+        public ICollection<Order> Orders { get; set; }
+
     }
 }
