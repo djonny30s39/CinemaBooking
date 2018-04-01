@@ -65,38 +65,12 @@
                             return obj == objSeat;
                         });
                         if (obj != null)
-                            removeSeats.push(objSeat);
-                        alert(removeSeats.length);
+                            removeSeats.push(objSeat); 
                     }
                     else {
                         $(seat).find("div").css("background", "#0047b3")
                             .addClass("reserved"); 
                         seats.push(objSeat);  
-
-
-                        //for (var i = 0; i < seats.length; i++)
-                        //{
-                        //    var pos = seats[i].split('-');
-                        //    //var pos = position.split('-');
-                        //    var numTicketText = "Row: " + ++pos[0]
-                        //        + " Place:" + pos[1]
-                        //        + " Area:" + pos[2];
-
-                        //    //var $newdiv1 = $("<div></div>"),
-                        //    //    newdiv2 = document.createElement("div"),
-                        //    //    existingdiv1 = document.getElementById(seatId - 1);
-
-                        //    //$("body").append($newdiv1, [newdiv2, existingdiv1]);
-
-                        //    //$("#ordered_tickets").append("div")
-                        //    //$("#numver_ticket").text(numTicketText);
-                        //    //var priceTicketText;
-                        //    //if (numTicketText[3] == 1)
-                        //    //    priceTicketText = 70;
-                        //    //else
-                        //    //    priceTicketText = 100;
-                        //    //$("#price_ticket").text(priceTicketText + " UAN");
-                        //}
 
                     }
                 }
@@ -113,10 +87,11 @@
 
             $("#btnOrderTicket").on("click", function (event) {
                 var jsonStr = {
-                    "Seat": seats
+                    "AddedPositions": seats,
+                    "RemovedPositions": removeSeats
                 };
                 
-                alert(JSON.stringify(jsonStr));
+               // alert(JSON.stringify(jsonStr));
                 $.ajax({
                     type: 'POST',
                     dataType: 'json',
@@ -138,15 +113,13 @@
 </script>
 
 <div style="margin: 30px auto;">
-    <div id="big-container" class="big-container">
+    <div id="big-container" >
         <div>
-            <div id="screen-container" class="screen-container">
+            <div id="screen-container" >
             </div>
         </div>
 
-        <div id="hall-container" class="hall-container">
-            @*<div id="area-container"  style="position: absolute;"
-                >*@
+        <div id="hall-container" > 
             @foreach (var area in Model.Areas)
             {
                 <div style="
@@ -185,8 +158,7 @@
                                         <div style="background: @color;
                                              border-radius: 4px;
                                              margin: 1px; height: @(area.SeatBox.Height - 2)px;
-                                             width: @(area.SeatBox.Width -2)px;"></div>
-                                        @*@(seat.Position.ColumnIndex+1)*@
+                                             width: @(area.SeatBox.Width -2)px;"></div> 
                                     </div>
                                 </div>
                             }

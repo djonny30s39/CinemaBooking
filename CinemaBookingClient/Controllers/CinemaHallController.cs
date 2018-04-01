@@ -40,7 +40,7 @@ namespace CinemaBookingClient.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post([FromBody]Seats seats)
+        public JsonResult Post([FromBody]Seats seats )
         {
             string url = Url.Action("CinemaHallPlan");
             if (!ModelState.IsValid)
@@ -52,9 +52,11 @@ namespace CinemaBookingClient.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
             }
             string userId = user.Id;
-            List<Position> orderSeats = seats.Seat;
-            var order = dataSevice.CreateOrder(userId, HardCodeValues.cinemaHallId, HardCodeValues.seanceId, orderSeats);
-                        
+            List<Position> addedSeats = seats.AddedPositions;
+            List<Position> removedSeats = seats.RemovedPositions;
+            //var order = dataSevice.CreateOrder(userId, HardCodeValues.cinemaHallId, HardCodeValues.seanceId, addedSeats);
+            var order = dataSevice.RecompileOrders(userId, HardCodeValues.cinemaHallId, HardCodeValues.seanceId, addedSeats, removedSeats);
+
             return Json(new { success = true,  url });
 
         }
@@ -72,7 +74,8 @@ namespace CinemaBookingClient.Controllers
         //}
         public class Seats
         {
-            public List<Position> Seat { get; set; }
+            public List<Position> AddedPositions { get; set; }
+            public List<Position> RemovedPositions { get; set; }
         }
     }
 
