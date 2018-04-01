@@ -34,8 +34,10 @@ namespace CinemaBookingClient.Services
                 {
                     json = await content.ReadAsStringAsync();
                 }
-                var zzz = JsonConvert.DeserializeObject<CinemaSeatPlan>(json);
-                return zzz;
+                var sketch = JsonConvert.DeserializeObject<CinemaSeatPlan>(json);
+                if (!string.IsNullOrEmpty(sketch.ErrorDescription))
+                    throw new ApplicationException($"Error when getting data from Scheme service: {sketch.ErrorDescription}");
+                return sketch;
             }          
         }
     }

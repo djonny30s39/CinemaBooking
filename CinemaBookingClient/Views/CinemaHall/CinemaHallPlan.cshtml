@@ -3,7 +3,6 @@
     ViewData["Title"] = "Booking";
 }
 <style>
-
     #big-container
     {
         height: @(Model.CinemaHallBox.Height + Model.ScreenBox.Height)px;
@@ -54,12 +53,9 @@
 
                     if ($(seat).hasClass("reserved")) {
                         $(seat).removeClass("reserved");
-                        $(seat).find("div").css("background", "#33adff");
-                        //TODO delete seat from seats  
-                        var index = seats.findIndex(s => s.RowIndex == objSeat.RowIndex && s.ColumnIndex == objSeat.ColumnIndex && s.AreaNumber == objSeat.AreaNumber); 
-                        alert(index);
-                        delete seats[index];
-                       
+                        $(seat).find("div").css("background", "#33adff"); 
+                        var index = seats.findIndex(s => s.RowIndex == objSeat.RowIndex && s.ColumnIndex == objSeat.ColumnIndex && s.AreaNumber == objSeat.AreaNumber);  
+                        delete seats[index]; 
                     }
                     else if ($(seat).hasClass("cust-booked")) {
                         $(seat).removeClass("cust-booked");
@@ -74,13 +70,8 @@
                     }
                     else {
                         $(seat).find("div").css("background", "#0047b3")
-                            .addClass("reserved");
-
-                        
-                        alert(JSON.stringify(objSeat) );
-
-                        seats.push(objSeat); 
-                        //alert(seats.length);
+                            .addClass("reserved"); 
+                        seats.push(objSeat);  
 
 
                         //for (var i = 0; i < seats.length; i++)

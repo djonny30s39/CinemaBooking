@@ -88,7 +88,7 @@ namespace CinemaBookingClient.Services
             context.SaveChanges();
         }
 
-        public Order RemoveSeats(string userId, int cinemaHallId, int seanceId, List<Position> rejectedSeats)
+        public Order CancelTickets(string userId, int cinemaHallId, int seanceId, List<Position> cancelledSeats)
         {
             throw new NotImplementedException();
         }

@@ -30,7 +30,10 @@ namespace CinemaBookingClient
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
              
             services.AddScoped<ICinemaDataService, SqlCinemaDataService>();
-            services.AddScoped<ICinemaSeatPlanWS, CinemaSeatPlanWS>();
+            if (Configuration.GetValue<bool>("CinemaSchemeRemote"))
+                services.AddScoped<ICinemaSeatPlanWS, CinemaSeatPlanWS>();
+            else
+                services.AddScoped<ICinemaSeatPlanWS, CinemaSeatPlanFromFile>();
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
