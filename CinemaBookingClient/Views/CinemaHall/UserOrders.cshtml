@@ -3,19 +3,32 @@
     ViewData["Title"] = "UserOrders";
 }
 
-<h2>UserOrders for @(ViewData["User"]) </h2>
+<h2>Your Orders, @(ViewData["User"]) </h2>
 
 <div>
+    <div class="row" id="order-head">
+        <div class="col-md-2 text-center">Date</div>
+        <div class="col-md-1 text-center">Time</div>
+        <div class="col-md-2 text-center">Cinema Name</div>
+        <div class="col-md-2 text-center">Cinema Hall</div>
+        <div class="col-md-2 text-center">Order Date</div>
+        <div class="col-md-3 text-center">Tickets</div>
+    </div>
     @foreach (var order in Model)
     {
-    <div>
-        <span> @order.Seance.Date</span>
-        <span> @order.Seance.Time</span>
-        <span> @order.Seance.CinemaHall.Cinema.Name</span>
-        <span> @order.Seance.CinemaHall.Name</span>
-        <span> @order.OrderDate</span> 
-        <span> @order.Tickets.Count</span>
-    </div>
+        <div class="row" style="padding:10px 0px;" >
+            <div class="col-md-2"> @order.Seance.Date</div>
+            <div class="col-md-1"> @order.Seance.Time</div>
+            <div class="col-md-2"> @order.Seance.CinemaHall.Cinema.Name</div>
+            <div class="col-md-2"> @order.Seance.CinemaHall.Name</div>
+            <div class="col-md-2"> @order.OrderDate</div>
+            <div class="col-md-3">                
+                @foreach (var ticket in order.Tickets)
+                {
+                    <div>Row: @(ticket.RowIndex + 1), Place: @(ticket.ColumnIndex +1)</div>
+                }
+            </div>
+        </div>
     }
 </div>
 

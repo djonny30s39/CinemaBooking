@@ -70,8 +70,7 @@ namespace CinemaBookingClient.Controllers
 
             return Json(new { success = true,  url });
 
-        }
-
+        }       
          
         public class Seats
         {
