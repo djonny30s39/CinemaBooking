@@ -24,7 +24,6 @@
         position: relative;
         height: @(Model.CinemaHallBox.Height)px;
         width: @(Model.CinemaHallBox.Width )px;
-
         margin: 0 auto
     }
 </style>
@@ -80,8 +79,7 @@
             $(".crossword-row > div").hover(function () {                
                 if ($(this).find("div").hasClass("booked"))
                 {
-                    var seat = $(this).find("div.seat").removeAttr("title");
-                    
+                    var seat = $(this).find("div.seat").removeAttr("title");                    
                 }
             });
 
@@ -89,9 +87,8 @@
                 var jsonStr = {
                     "AddedPositions": seats,
                     "RemovedPositions": removeSeats
-                };
-                
-               // alert(JSON.stringify(jsonStr));
+                };                
+              
                 $.ajax({
                     type: 'POST',
                     dataType: 'json',
@@ -171,6 +168,6 @@
 </div>
 
 @*info panel*@
-<div id="ordered_tickets"></div>
+@*<div id="ordered_tickets"></div>*@
 
 <button class="btn btn-success" id="btnOrderTicket">Order Tickets</button>

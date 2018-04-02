@@ -6,8 +6,7 @@ using CinemaBookingClient.ViewModels;
 
 namespace CinemaBookingClient.Models
 {
-    // todo Make CinemaSeatPlanViewModel live during the entire user's session
-    // todo seats not implemented
+    // TODO Make CinemaSeatPlanViewModel live during the entire user's session
     public class CinemaHallCreator
     { 
         public static CinemaSeatPlanViewModel GetCinemaHallViewModel(ICinemaSeatPlanWS seatPlan, 
@@ -34,7 +33,7 @@ namespace CinemaBookingClient.Models
             vm.ScreenPos.Left = (int)(cinemaHall.SeatLayoutData.ScreenStart * unitW);
             vm.ScreenPos.Top = 0;
 
-            // CreateAreas 
+            // create areas 
             foreach (var a in cinemaHall.SeatLayoutData.Areas.OrderBy(z => z.Top))
             {
                 VMArea area = new VMArea()
@@ -45,7 +44,6 @@ namespace CinemaBookingClient.Models
                     ColumnCount = a.ColumnCount,
                     RowCount = a.RowCount, 
                     AreaCategoryCode = a.AreaCategoryCode
-                    //Rows = new List<AreaRow>(a.Rows)
                 };
                 area.AreaBox.Height = (int)(a.Height * unitH);
                 area.AreaBox.Width = (int)(a.Width * unitW);
@@ -88,10 +86,7 @@ namespace CinemaBookingClient.Models
                 vm.Areas.Add(area);
             }
             return vm;
-
         }        
     }
-
-
 
 }

@@ -68,11 +68,9 @@ namespace CinemaBookingClient.Services
             Order order = new Order
             {
                 CustomerId = currentUser.Id,
-                //CinemaHallId = cinemaHallId,
                 SeanceId = seanceId,
                 OrderDate = DateTime.Now
-            };
-            //currentUser.Orders.Add(order);
+            };            
             context.Orders.Add(order);
             SaveData();
 
@@ -83,7 +81,6 @@ namespace CinemaBookingClient.Services
                     AreaNumber = t.AreaNumber,
                     RowIndex = t.RowIndex,
                     ColumnIndex = t.ColumnIndex,
-                    //CinemaHallId = cinemaHallId,
                     OrderId = order.Id
                 };
                 context.Tickets.Add(ticket);
@@ -142,8 +139,6 @@ namespace CinemaBookingClient.Services
         public void SaveData()
         {
             context.SaveChanges();
-        }
-
-        
+        }        
     }
 }

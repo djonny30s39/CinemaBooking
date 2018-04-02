@@ -1,7 +1,4 @@
-﻿using CinemaBookingClient.Models.DataModel;
-using System;
-
-namespace CinemaBookingClient.HardCode
+﻿namespace CinemaBookingClient.HardCode
 {
     public static class HardCodeValues
     { 
@@ -11,8 +8,5 @@ namespace CinemaBookingClient.HardCode
         public static readonly int cinemaHallId = 3;
         public static readonly int cinemaId = 2;
         public static readonly int seanceId = 1;
-        //public static readonly int cinemaHallId = 2;
-        //public static readonly int cinemaId = 1;
-        //public static readonly int seanceId = 1;
     }
 }

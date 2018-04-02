@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CinemaBookingClient.Models
 {
     public class CinemaSeatPlan
     {
         public string ErrorDescription { get; set; }
-        //признак успешности получения данных. 0 - OK, иначе ошибка.
+        //a sign of success in obtaining data: 0 - OK, 1 - Error.
         public int ResponseCode { get; set; }        
         public SeatLayoutData SeatLayoutData { get; set; }
     }
 
     /// <summary>
-    ///объект со схемой зала. Для схемы зала выделено поле 100 Х 100. Все координаты,
-    ///которые указаны в схеме зала будут в рамках этого поля.
+    ///object with cinema hall.
+    ///there are provide a field 100 Х 100 for the cinema hall.
+    ///All specitied coordinates at hall scheme are in borders of the field.   
     /// </summary>
     public class SeatLayoutData
     {
@@ -29,73 +27,72 @@ namespace CinemaBookingClient.Models
     }
 
     /// <summary>
-    /// объект со списком зон зала. Каждая зона являет собой прямоугольный объект,
-    /// внутри которого расположены места.
+    /// object with list of hall areas.
+    /// Each area is rectangular object, there are places inside of it    
     /// </summary>
     public class Area
     {
         public int AreaCategoryCode { get; set; }
-        //количество мест по оси Х
+        //quantity of places along the Х axis
         public int ColumnCount { get; set; }
         public string Description { get; set; }
         public string DescriptionAlt { get; set; }
         public bool HasSofaSeatingEnabled { get; set; }
-        //высота зоны
+        //area height
         public int Height { get; set; }
         public bool IsAllocatedSeating { get; set; }
-        //левая координата зоны
+        //left coordinate of area
         public int Left { get; set; }
         public int Number { get; set; }
-        //общее количество мест в зоне
+        //general quantity of seats in area
         public int NumberOfSeats { get; set; }
-        //количество рядов
+        //rows quantity
         public int RowCount { get; set; }
-        //объект со списом рядов в рамках зоны
+        //object with rows list in borders of area
         public List<AreaRow> Rows { get; set; }
-        //верхняя координата зоны
+        //top coordinate of area
         public int Top { get; set; }
-        //ширина зоны
+        //area width
         public int Width { get; set; }
     }
 
     /// <summary>
-    /// объект со списом рядов в рамках зоны
+    /// object with list of rows in borders of area
     /// </summary>
     public class AreaRow
     {
-        //номер ряда
+        //number of row
         public int PhysicalName { get; set; }
-        //объект со списком мест в рамках ряда
+        //object with list of places in borders of the row
         public List<Seat> Seats { get; set; }
     }
 
     /// <summary>
-    /// объект со списком мест в рамках ряда
+    /// object with list of seats in borders of the row
     /// </summary>
     public class Seat
     {
-        //номер места
+        //number of place
         public int Id { get; set; }
         public byte OriginalStatus { get; set; }        
         public Position Position { get; set; }
         public byte Priority { get; set; }
         public int SeatStyle { get; set; }
         public int? SeatsInGroup { get; set; }
-        //статус места. 0 - свободно. 1 - занято.
+        //place status. 0 - free. 1 - busy.
         public byte Status { get; set; }
     }
 
     /// <summary>
-    /// объект с данными по месту. Эти данные надо сохранить в
-    /// БД при заказе места
+    /// object with place data. Those data should be saved to DB when order case   
     /// </summary>
     public class Position
     {
-        //номер зоны
+        //number of area
         public int AreaNumber { get; set; }
-        //системный номер места
+        //system number of place
         public int ColumnIndex { get; set; }
-        //системный номер ряда
+        //system number of row
         public int RowIndex { get; set; }
     }
 }

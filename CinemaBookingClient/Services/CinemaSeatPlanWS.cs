@@ -2,9 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -21,8 +18,7 @@ namespace CinemaBookingClient.Services
         }
 
         public async Task<CinemaSeatPlan> GetCinemaSeatPlanAsync()
-        {
-            //CinemaSeatPlan response = null;
+        {           
             using (var client = new HttpClient())
             {
                 var url = new Uri(Configuration.GetConnectionString("WebServiceConnection"));
